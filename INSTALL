@@ -1,0 +1,9 @@
+JSAnalysis Installation instructions
+=================================
+
+You can build JSAnalysis with make.
+
+------------------------------------------------------------------
+make
+make release     (will create a new folder named "release" and copy files in it. ) 
+------------------------------------------------------------------

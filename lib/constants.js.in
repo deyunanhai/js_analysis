@@ -1,0 +1,139 @@
+/*
+ * Copyright (C) 2003-2012 bocelli.hu <bocelli.hu@gmail.com>
+ * 
+ * This file is part of JSAnalysis, the Javascript Static Code Analysis Engine.
+ * 
+ * JSAnalysis is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * JSAnalysis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with JSAnalysis.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+var NodeArity = {
+    PN_FUNC     : 0,
+    PN_LIST     : 1,
+    PN_TERNARY  : 6,
+    PN_BINARY   : 5,
+    PN_UNARY    : 4,
+    PN_NAME     : 2,
+    PN_NULLARY  : 3
+};
+
+var ARITY_NAMES = [
+    "FUNC",     
+    "LIST",     
+    "NAME",    
+    "NULLARY",
+    "UNARY",
+    "BINARY",
+    "TERNARY"
+];
+
+var NodeType = {
+    EOF : 0,                        /* end of file */
+    EOL : 1,                        /* end of line */
+    SEMI : 2,                       /* semicolon */
+    COMMA : 3,                      /* comma operator */
+    ASSIGN : 4,                     /* assignment ops (: +: -: etc.) */
+    HOOK : 5, COLON : 6,            /* conditional (?:) */
+    OR : 7,                         /* logical or (||) */
+    AND : 8,                        /* logical and (&&) */
+    BITOR : 9,                      /* bitwise-or (|) */
+    BITXOR : 10,                    /* bitwise-xor (^) */
+    BITAND : 11,                    /* bitwise-and (&) */
+    EQOP : 12,                      /* equality ops (:: !:) */
+    RELOP : 13,                     /* relational ops (< <: > >:) */
+    SHOP : 14,                      /* shift ops (<< >> >>>) */
+    PLUS : 15,                      /* plus */
+    MINUS : 16,                     /* minus */
+    STAR : 17, DIVOP : 18,          /* multiply/divide ops (* / %) */
+    UNARYOP : 19,                   /* unary prefix operator */
+    INC : 20, DEC : 21,             /* increment/decrement (++ --) */
+    DOT : 22,                       /* member operator (.) */
+    LB : 23, RB : 24,               /* left and right brackets */
+    LC : 25, RC : 26,               /* left and right curlies (braces) */
+    LP : 27, RP : 28,               /* left and right parentheses */
+    NAME : 29,                      /* identifier */
+    NUMBER : 30,                    /* numeric constant */
+    STRING : 31,                    /* string constant */
+    OBJECT : 32,                    /* RegExp or other object constant */
+    PRIMARY : 33,                   /* true, false, null, this, super */
+    FUNCTION : 34,                  /* function keyword */
+    EXPORT : 35,                    /* export keyword */
+    IMPORT : 36,                    /* import keyword */
+    IF : 37,                        /* if keyword */
+    ELSE : 38,                      /* else keyword */
+    SWITCH : 39,                    /* switch keyword */
+    CASE : 40,                      /* case keyword */
+    DEFAULT : 41,                   /* default keyword */
+    WHILE : 42,                     /* while keyword */
+    DO : 43,                        /* do keyword */
+    FOR : 44,                       /* for keyword */
+    BREAK : 45,                     /* break keyword */
+    CONTINUE : 46,                  /* continue keyword */
+    IN : 47,                        /* in keyword */
+    VAR : 48,                       /* var keyword */
+    WITH : 49,                      /* with keyword */
+    RETURN : 50,                    /* return keyword */
+    NEW : 51,                       /* new keyword */
+    DELETE : 52,                    /* delete keyword */
+    DEFSHARP : 53,                  /* #n: for object/array initializers */
+    USESHARP : 54,                  /* #n# for object/array initializers */
+    TRY : 55,                       /* try keyword */
+    CATCH : 56,                     /* catch keyword */
+    FINALLY : 57,                   /* finally keyword */
+    THROW : 58,                     /* throw keyword */
+    INSTANCEOF : 59,                /* instanceof keyword */
+    DEBUGGER : 60,                  /* debugger keyword */
+    XMLSTAGO : 61,                  /* XML start tag open (<) */
+    XMLETAGO : 62,                  /* XML end tag open (</) */
+    XMLPTAGC : 63,                  /* XML point tag close (/>) */
+    XMLTAGC : 64,                   /* XML start or end tag close (>) */
+    XMLNAME : 65,                   /* XML start-tag non-final fragment */
+    XMLATTR : 66,                   /* XML quoted attribute value */
+    XMLSPACE : 67,                  /* XML whitespace */
+    XMLTEXT : 68,                   /* XML text */
+    XMLCOMMENT : 69,                /* XML comment */
+    XMLCDATA : 70,                  /* XML CDATA section */
+    XMLPI : 71,                     /* XML processing instruction */
+    AT : 72,                        /* XML attribute op (@) */
+    DBLCOLON : 73,                  /* namespace qualified name op (::) */
+    ANYNAME : 74,                   /* XML AnyName singleton (*) */
+    DBLDOT : 75,                    /* XML descendant op (..) */
+    FILTER : 76,                    /* XML filtering predicate op (.()) */
+    XMLELEM : 77,                   /* XML element node type (no token) */
+    XMLLIST : 78,                   /* XML list node type (no token) */
+    YIELD : 79,                     /* yield from generator function */
+    ARRAYCOMP : 80,                 /* array comprehension initialiser */
+    ARRAYPUSH : 81,                 /* array push within comprehension */
+    LEXICALSCOPE : 82,              /* block scope AST node label */
+    LET : 83,                       /* let keyword */
+    BODY : 84,                      /* synthetic body of function with
+                                       destructuring formal parameters */
+    RESERVED : 85,                  /* reserved keywords */
+    LIMIT : 86                      /* domain size */
+};
+
+var TYPE_NAMES = [
+  "EOF", "EOL", "SEMI", "COMMA", "ASSIGN", "HOOK", "COLON", "OR", "AND",
+  "BITOR", "BITXOR", "BITAND", "EQOP", "RELOP", "SHOP", "PLUS", "MINUS", "STAR",
+  "DIVOP", "UNARYOP", "INC", "DEC", "DOT", "LB", "RB", "LC", "RC", "LP", "RP",
+  "NAME", "NUMBER", "STRING", "OBJECT", "PRIMARY", "FUNCTION", "EXPORT",
+  "IMPORT", "IF", "ELSE", "SWITCH", "CASE", "DEFAULT", "WHILE", "DO", "FOR",
+  "BREAK", "CONTINUE", "IN", "VAR", "WITH", "RETURN", "NEW", "DELETE",
+  "DEFSHARP", "USESHARP", "TRY", "CATCH", "FINALLY", "THROW", "INSTANCEOF",
+  "DEBUGGER", "XMLSTAGO", "XMLETAGO", "XMLPTAGC", "XMLTAGC", "XMLNAME",
+  "XMLATTR", "XMLSPACE", "XMLTEXT", "XMLCOMMENT", "XMLCDATA", "XMLPI", "AT",
+  "DBLCOLON", "ANYNAME", "DBLDOT", "FILTER", "XMLELEM", "XMLLIST",
+  "YIELD","ARRAYCOMP","ARRAYPUSH","LEXICALSCOPE","LET","BODY",
+  "RESERVED",  "LIMIT"
+];
+
