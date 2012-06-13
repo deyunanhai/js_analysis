@@ -13,3 +13,7 @@
 
 obj/*
 release/*
+third-party/dist/*
+third-party/js/*
+third-party/nspr-*/*
+
