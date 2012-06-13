@@ -1,7 +1,10 @@
+JSAnalysis
+==========
+
 Javascript Static Code Analysis Engine
 
 Features
---------
+========
 
 * javascript runtime engine.
 * parse javascript code to a tree.
@@ -10,7 +13,7 @@ Features
 
 
 Copyright
----------
+=========
 
 Copyright (C) 2003-2012 bocelli.hu <bocelli.hu@gmail.com>
 
