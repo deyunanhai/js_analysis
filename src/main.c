@@ -258,6 +258,12 @@ int main(int argc, char **argv) {
         fprintf(stderr, "cannot initialize standard classes");
         exit(EXIT_FAILURE);
     }
+#if JS_HAS_FILE_OBJECT
+    if(!js_InitFileClass(context, global)) {
+        fprintf(stderr, "cannot initialize file class");
+        exit(EXIT_FAILURE);
+    }
+#endif /* JS_HAS_FILE_OBJECT */
     files = JS_NewArrayObject(context, 0, NULL);
     if (files == NULL) {
         fprintf(stderr, "cannot create files object");
