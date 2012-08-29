@@ -7,7 +7,7 @@ CC = gcc
 APPNAME = js_analysis
 THIRD_PARTY_DIR = third-party
 THIRD_PARTY_DIST = $(THIRD_PARTY_DIR)/dist
-OTHER_LIBS = $(THIRD_PARTY_DIST)/lib/libjs.a
+OTHER_LIBS = $(THIRD_PARTY_DIST)/lib/libjs.a $(THIRD_PARTY_DIST)/lib/libnspr4.a
 CFILES =  	   \
 	analysis.c \
 	jsfile.c   \
@@ -18,7 +18,7 @@ CFLAGS += -DXP_UNIX -DSVR4 -DSYSV -D_BSD_SOURCE -DPOSIX_SOURCE -DHAVE_LOCALTIME_
 CFLAGS += -DHAVE_VA_COPY -DVA_COPY=va_copy -DPIC -DJS_HAS_FILE_OBJECT 
 CFLAGS += $(INCLUDES)
 LDFLAGS = 
-PROG_LIBS = -lm -lnspr4 -lpthread -ldl
+PROG_LIBS = -lm -lpthread -ldl
 TOOL_LIBS = $(PROG_LIBS)
 PROG = $(OBJ_DIR)/$(APPNAME) 
 
