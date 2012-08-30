@@ -73,6 +73,6 @@ clean:
 release: $(PROG)
 	@if test ! -d $(RELEASE_DIR); then rm -rf $(RELEASE_DIR); mkdir -p $(RELEASE_DIR); fi
 	cp $(PROG) $(RELEASE_DIR) && cp -r $(JS_LIB_DIR) $(RELEASE_DIR)
-	@cd $(RELEASE_DIR); strip -s $(APPNAME)
+	@cd $(RELEASE_DIR); strip -s $(APPNAME) || strip -x $(APPNAME)
 
 

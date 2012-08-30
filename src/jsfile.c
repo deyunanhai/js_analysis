@@ -1728,7 +1728,8 @@ file_read(JSContext *cx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
         return JS_TRUE;
     } else {
         JS_free(cx, buf);
-        goto out;
+        *rval = JSVAL_NULL;
+        return JS_TRUE;
     }
 out:
     *rval = JSVAL_FALSE;
