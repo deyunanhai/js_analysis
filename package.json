@@ -1,0 +1,29 @@
+{
+  "name": "js_analysis",
+  "version": "0.0.1",
+  "description": "Javascript Static Code Analysis Engine",
+  "main": "index.js",
+  "scripts": {
+    "install": "make release",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/deyunanhai/js_analysis.git"
+  },
+  "bin": {
+    "express": "./release/js_analysis"
+  },
+  "keywords": [
+    "Javascript",
+    "Static",
+    "Code",
+    "Analysis",
+    "parse",
+    "javascript"
+  ],
+  "author": "bocelli.hu",
+  "license": "MPL/GPL/LGPL",
+  "readmeFilename": "README",
+  "gitHead": "a8c9c790af7d846eb2258a7464c79a0650ef6a99"
+}
