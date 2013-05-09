@@ -1,10 +1,14 @@
 {
+  "author": {
+    "name": "bocelli.hu",
+    "email": "bocelli.hu@gmail.com"
+  },
   "name": "js_analysis",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Javascript Static Code Analysis Engine",
   "main": "index.js",
   "scripts": {
-    "install": "make release",
+    "preinstall": "make release",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -12,7 +16,7 @@
     "url": "git://github.com/deyunanhai/js_analysis.git"
   },
   "bin": {
-    "express": "./release/js_analysis"
+    "js_analysis": "./release/js_analysis"
   },
   "keywords": [
     "Javascript",
@@ -24,6 +28,6 @@
   ],
   "author": "bocelli.hu",
   "license": "MPL/GPL/LGPL",
-  "readmeFilename": "README",
+  "readmeFilename": "README.md",
   "gitHead": "a8c9c790af7d846eb2258a7464c79a0650ef6a99"
 }
