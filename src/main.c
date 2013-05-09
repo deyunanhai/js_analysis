@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003-2012 bocelli.hu <bocelli.hu@gmail.com>
- * 
+ *
  * This file is part of JSAnalysis, the Javascript Static Code Analysis Engine.
- * 
+ *
  * JSAnalysis is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * JSAnalysis is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with JSAnalysis.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -46,7 +46,8 @@
 #include <io.h>     /* for isatty() */
 #endif
 
-#include "analysis.h" 
+#include <js_lib.h>
+#include "analysis.h"
 
 typedef enum JSShellExitCode {
     EXITCODE_RUNTIME_ERROR      = 3,
@@ -58,6 +59,7 @@ typedef struct LibraryCollection {
     struct LibraryCollection *next;
 } LibraryCollection;
 
+static JSBool setupCommonLib(JSContext *cx, JSObject *obj);
 static JSBool processBytes(JSContext *cx, JSObject *obj, const char *bytes);
 static JSBool processFile(JSContext *cx, JSObject *obj, const char *filename, jsval *result);
 
@@ -184,15 +186,15 @@ static int usage(void) {
 }
 
 static JSBool initGlobalObject(JSContext *cx, JSObject *global) {
-    
+
     jsval propertyval;
-    
+
     propertyval = STRING_TO_JSVAL(baseDir);
     if(!JS_SetProperty(cx, global, "__base_dir", &propertyval)) {
         fprintf(gErrFile, "%s\n", "can't set property to gobal object.");
         return JS_FALSE;
     }
-   
+
     propertyval = OBJECT_TO_JSVAL(global);
     if(!JS_SetProperty(cx, global, "__global", &propertyval)) {
         fprintf(gErrFile, "%s\n", "can't set property to gobal object.");
@@ -204,7 +206,7 @@ static JSBool initGlobalObject(JSContext *cx, JSObject *global) {
         fprintf(gErrFile, "%s\n", "can't set property to gobal object.");
         return JS_FALSE;
     }
-    
+
     return JS_TRUE;
 }
 
@@ -215,7 +217,7 @@ int main(int argc, char **argv) {
     jsval result;
     int i;
     char path[PATH_MAX], *p;
-    
+
     files = NULL;
     gErrFile = stderr;
     reportWarnings = JS_FALSE;
@@ -231,7 +233,7 @@ int main(int argc, char **argv) {
             break;
         }
     }
-    
+
     runtime = JS_NewRuntime(1024L * 1024L * 1024L);
     if (runtime == NULL) {
         fprintf(stderr, "cannot create runtime");
@@ -281,6 +283,10 @@ int main(int argc, char **argv) {
         fprintf(stderr, "cannot initialize analysis functions");
         exit(EXIT_FAILURE);
     }
+    if(!setupCommonLib(context, global)) {
+        fprintf(stderr, "cannot setup common libs");
+        exit(EXIT_FAILURE);
+    }
     for (i = 1; i < argc; i++) {
         if (argv[i][0] != '-') {
             processFile(context, global, argv[i], &result);
@@ -292,7 +298,7 @@ int main(int argc, char **argv) {
                 return usage();
 
             int ver = atoi(argv[i]);
-            if(ver < 100 || ver > 170) 
+            if(ver < 100 || ver > 170)
                 return usage();
             JS_SetVersion(context, (JSVersion) ver);
             break;
@@ -385,19 +391,19 @@ static JSBool jsfunc_use(JSContext *cx, JSObject *obj, uintN argc, jsval *argv, 
                              "use");
         goto err;
     }
-    
+
     {
         char path[PATH_MAX];
         struct stat sts;
         char *filename;
 #define file_exists(p) (stat(p, &sts) != -1 && S_ISREG(sts.st_mode))
-        
+
         filename = JS_GetStringBytes(filenamestr);
         strcpy(path, JS_GetStringBytes(baseDir));
         strcat(path, "/lib/");
         strcat(path, filename);
         strcat(path, ".js");
-        
+
         if (!file_exists(path)) {
             LibraryCollection *l;
             l = firstLibrary;
@@ -408,18 +414,17 @@ static JSBool jsfunc_use(JSContext *cx, JSObject *obj, uintN argc, jsval *argv, 
                 strcat(path, ".js");
                 if(file_exists(path)) break;
                 l = l->next;
-            } 
+            }
         }
         if(!processFile(cx, obj, path, &result))
             goto err;
 #undef file_not_exists
-         
     }
 
     *rval = JSVAL_TRUE;
     ret = JS_TRUE;
     goto out;
-err: 
+err:
     *rval = JSVAL_FALSE;
     ret = JS_FALSE;
 out:
@@ -442,13 +447,13 @@ static JSBool jsfunc_execFile(JSContext *cx, JSObject *obj, uintN argc, jsval *a
         }
         filename = JS_GetStringBytes(filenameStr);
     }
-    
+
     if(!processFile(cx, obj, filename, rval))
         goto err;
 
     ret = JS_TRUE;
     goto out;
-err: 
+err:
     ret = JS_FALSE;
 out:
     return ret;
@@ -469,7 +474,7 @@ static JSBool pushFileName(JSContext *cx, const char* filename) {
     return JS_TRUE;
 }
 static JSBool popFileName(JSContext *cx) {
-     
+
     filesIndex--;
     if(!JS_SetArrayLength(cx, files, filesIndex)) {
         filesIndex++;
@@ -497,6 +502,17 @@ static JSBool processBytes(JSContext *cx, JSObject *obj, const char *bytes) {
 
     return JS_TRUE;
 }
+
+static JSBool setupCommonLib(JSContext *cx, JSObject *obj) {
+
+    if(!processBytes(cx, obj, (const char*)js_lib_constants)) return JS_FALSE;
+    if(!processBytes(cx, obj, (const char*)js_lib_make_public)) return JS_FALSE;
+    if(!processBytes(cx, obj, (const char*)js_lib_console)) return JS_FALSE;
+    if(!processBytes(cx, obj, (const char*)js_lib_common)) return JS_FALSE;
+    //if(!processBytes(cx, obj, (const char*)js_lib_test_main)) return JS_FALSE;
+    return JS_TRUE;
+}
+
 static JSBool processFile(JSContext *cx, JSObject *obj, const char *filename, jsval *result) {
     JSScript *script;
     FILE *file;
@@ -535,5 +551,4 @@ static JSBool processFile(JSContext *cx, JSObject *obj, const char *filename, js
 
     return JS_TRUE;
 }
-
 
