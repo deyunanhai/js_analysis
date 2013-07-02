@@ -7,8 +7,6 @@ var binPath = require(path.join(__dirname, '..', 'js_analysis')).path
 
 var args = process.argv.slice(2)
 
-// For Node 0.6 compatibility, pipe the streams manually, instead of using
-// `{ stdio: 'inherit' }`.
 var cp = spawn(binPath, args)
 cp.stdout.pipe(process.stdout)
 cp.stderr.pipe(process.stderr)
