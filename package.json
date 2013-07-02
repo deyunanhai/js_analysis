@@ -4,7 +4,7 @@
     "email": "bocelli.hu@gmail.com"
   },
   "name": "js_analysis",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Javascript Static Code Analysis Engine",
   "main": "js_analysis.js",
   "scripts": {
@@ -16,7 +16,7 @@
     "url": "git://github.com/deyunanhai/js_analysis.git"
   },
   "bin": {
-    "js_analysis": "./release/js_analysis"
+    "js_analysis": "./bin/js_analysis"
   },
   "keywords": [
     "Javascript",
