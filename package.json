@@ -4,9 +4,9 @@
     "email": "bocelli.hu@gmail.com"
   },
   "name": "js_analysis",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Javascript Static Code Analysis Engine",
-  "main": "index.js",
+  "main": "js_analysis.js",
   "scripts": {
     "preinstall": "make release",
     "test": "echo \"Error: no test specified\" && exit 1"
