@@ -8,7 +8,7 @@
   "description": "Javascript Static Code Analysis Engine",
   "main": "js_analysis.js",
   "scripts": {
-    "preinstall": "make release",
+    "preinstall": "make release clean_temp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

@@ -79,6 +79,10 @@ clean:
 	rm -rf $(RELEASE_DIR)
 	@cd $(THIRD_PARTY_DIR); ./clean.sh
 
+clean_temp:
+	rm -rf $(OBJ_DIR)
+	@cd $(THIRD_PARTY_DIR); ./clean.sh
+
 release: $(PROG)
 	@if test ! -d $(RELEASE_DIR); then rm -rf $(RELEASE_DIR); mkdir -p $(RELEASE_DIR); fi
 	cp $(PROG) $(RELEASE_DIR) && cp -r $(JS_LIB_DIR) $(RELEASE_DIR)
