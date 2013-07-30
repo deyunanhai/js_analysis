@@ -4,7 +4,7 @@
     "email": "bocelli.hu@gmail.com"
   },
   "name": "js_analysis",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Javascript Static Code Analysis Engine",
   "main": "js_analysis.js",
   "scripts": {
@@ -27,7 +27,7 @@
     "javascript"
   ],
   "author": "bocelli.hu",
-  "license": "MPL/GPL/LGPL",
+  "license": "MIT",
   "readmeFilename": "README.md",
   "gitHead": "a8c9c790af7d846eb2258a7464c79a0650ef6a99"
 }
