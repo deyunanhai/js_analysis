@@ -96,6 +96,7 @@ static JSBool jsfunc_scanToken(JSContext *cx, JSObject *obj, uintN argc, jsval *
 static JSFunctionSpec _functions[] = {
     {"parse", jsfunc_parse, 1, 0, 0},
     {"scan_token", jsfunc_scanToken, 1, 0, 0},
+    0
 };
 
 JSBool js_InitAnalysisFunctions(JSContext *cx, JSObject* obj) {
