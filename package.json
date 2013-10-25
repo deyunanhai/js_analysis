@@ -4,7 +4,7 @@
     "email": "bocelli.hu@gmail.com"
   },
   "name": "js_analysis",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Javascript Static Code Analysis Engine",
   "main": "js_analysis.js",
   "scripts": {
